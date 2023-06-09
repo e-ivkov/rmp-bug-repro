@@ -10,9 +10,11 @@ enum A {
 
 fn main() {
     let a = A::B;
+    // Will work if changed to rmp_serde::to_vec_named
     let a_encoded = rmp_serde::to_vec(&a).unwrap();
     let mut cursor = std::io::Cursor::new(a_encoded.clone());
     dbg!(rmpv::decode::read_value(&mut cursor).unwrap());
+    // Panics here
     let a_decoded: A = rmp_serde::from_slice(&a_encoded).unwrap();
     dbg!(&a_decoded);
     assert_eq!(a_decoded, a);
